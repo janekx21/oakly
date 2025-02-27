@@ -1,0 +1,7 @@
+type Maybe a = Just a | Nothing
+
+type Number = Integer Int | Floatingpoint Float
+
+main = "Hello there" # comment
+
+view model = "Some html"

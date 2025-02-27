@@ -1,0 +1,32 @@
+==================
+Sum type
+==================
+
+type Maybe a = Just a | Nothing
+
+---
+
+(source_file
+  (type_definition
+    (sum_type
+	  (type_identifier)
+	  (type_parameter)
+	  (constructor (constructor_name) (type_parameter))
+	  (constructor (constructor_name)))))
+
+==================
+Product type
+==================
+
+alias Post a = { a | title : String, body : String}
+
+---
+
+(source_file
+  (type_definition
+    (product_type
+	  (type_identifier)
+	  (type_parameter)
+	  include: (type_parameter)
+	  (name_type_pair (field_identifier) (type_identifier))
+	  (name_type_pair (field_identifier) (type_identifier)))))

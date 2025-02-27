@@ -1,0 +1,36 @@
+{
+  "grammars": [
+    {
+      "name": "oakly",
+      "camelcase": "Oakly",
+      "scope": "source.oakly",
+      "file-types": [
+        "oakly"
+      ],
+      "highlights": "queries/highlights.scm",
+      "injection-regex": "^oakly$"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "Functional language",
+    "authors": [
+      {
+        "name": "Janek Winkler",
+        "email": "janekx21@gmail.com"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/janekx21/oakly"
+    }
+  },
+  "bindings": {
+    "c": false,
+    "go": false,
+    "node": false,
+    "python": false,
+    "rust": true,
+    "swift": false
+  }
+}
