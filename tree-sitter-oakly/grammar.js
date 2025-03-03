@@ -1,3 +1,24 @@
+
+
+start => "a" name | "b"*
+name = "janek" | "lara"
+
+
+
+bbb
+aaa
+
+a
+
+ab
+
+b
+
+ajanek
+
+alara
+
+
 /**
  * @file Functional language
  * @author Janek Winkler <janekx21@gmail.com>
@@ -10,7 +31,7 @@
 module.exports = grammar({
   name: "oakly",
 
-  conflicts: ($) => [[]],
+  conflicts: ($) => [[$.constructor], [$.sum_type]],
 
   extras: ($) => [/[ \t\n\r]/, $.comment],
 
@@ -19,8 +40,9 @@ module.exports = grammar({
     source_file: ($) => repeat(choice($.type_definition, $.value_definition)),
     comment: (_) => token(seq("#", /.*/)),
 
-    type_definition: ($) => seq(choice($.sum_type, $.product_type), "\n"),
-    sum_type: ($) =>
+    type_definition: ($) =>
+      seq(choice($.sum_type_definition, $.alias_definition)),
+    sum_type_definition: ($) =>
       seq(
         "type",
         $.type_identifier,
@@ -29,25 +51,25 @@ module.exports = grammar({
         $.constructor,
         repeat(seq("|", $.constructor)),
       ),
-    constructor: ($) =>
-      seq(
-        $.constructor_name,
-        repeat(choice($.type_identifier, $.type_parameter)),
-      ),
-    constructor_name: ($) => /[A-Z][A-Za-z]*/,
-    type_identifier: ($) => /[A-Z][A-Za-z]*/,
-    type_parameter: ($) => /[a-z]+/,
-    value_definition: ($) =>
-      seq($.value_identifier, repeat($.parameter), "=", $.expression),
-    parameter: ($) => /[a-z]+/,
-    value_identifier: ($) => /[a-z]+/,
+    constructor: ($) => seq($.constructor_name, repeat($.type)),
 
+    value_definition: ($) =>
+      seq($.value_identifier, repeat($.parameter), "=", $.expression), // janeksName = "Janek"
+    parameter: ($) => /[a-z]+/,
+
+    alias_definition: ($) =>
+      seq("alias", $.type_identifier, repeat($.type_parameter), "=", $.type),
+
+    type: ($) =>
+      choice(
+        $.sum_type,
+        $.type_parameter,
+        seq("(", $.type, ")"),
+        $.product_type,
+      ),
+    sum_type: ($) => seq($.type_identifier, repeat($.type)),
     product_type: ($) =>
       seq(
-        "alias",
-        $.type_identifier,
-        repeat($.type_parameter),
-        "=",
         "{",
         field("include", optional(seq($.type_parameter, "|"))),
         $.name_type_pair,
@@ -55,10 +77,15 @@ module.exports = grammar({
         "}",
       ),
 
-    name_type_pair: ($) => seq($.field_identifier, ":", $.type_identifier),
-    field_identifier: ($) => /[a-z]+/,
+    name_type_pair: ($) => seq($.field_identifier, ":", $.type),
 
     expression: ($) => $.string,
     string: ($) => /\".*\"/,
+
+    constructor_name: ($) => /[A-Z][A-Za-z0-9]*/,
+    type_identifier: ($) => /[A-Z][A-Za-z0-9]*/,
+    type_parameter: ($) => /[a-z][A-Za-z0-9]*/,
+    value_identifier: ($) => /[a-z][A-Za-z0-9]*/,
+    field_identifier: ($) => /[a-z][A-Za-z0-9]*/,
   },
 });

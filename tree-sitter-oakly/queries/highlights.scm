@@ -1,4 +1,4 @@
-["type"] @keyword.type
+["type" "alias"] @keyword.type
 
 [ (type_identifier) ] @type
 
@@ -8,10 +8,15 @@
 ; (int_literal) @number
 (value_identifier) @function
 
+(field_identifier) @variable.member 
 
 (string) @string
 (comment) @comment
 
 [ "=" ] @operator
 
-[ "|" ] @punctuation.delimiter
+[ "|" "," ":" ] @punctuation.delimiter
+
+["{" "}" "(" ")"] @punctuation.bracket
+
+(ERROR) @error 

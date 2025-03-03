@@ -42,21 +42,17 @@
           "members": [
             {
               "type": "SYMBOL",
-              "name": "sum_type"
+              "name": "sum_type_definition"
             },
             {
               "type": "SYMBOL",
-              "name": "product_type"
+              "name": "alias_definition"
             }
           ]
-        },
-        {
-          "type": "STRING",
-          "value": "\n"
         }
       ]
     },
-    "sum_type": {
+    "sum_type_definition": {
       "type": "SEQ",
       "members": [
         {
@@ -110,32 +106,11 @@
         {
           "type": "REPEAT",
           "content": {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "SYMBOL",
-                "name": "type_identifier"
-              },
-              {
-                "type": "SYMBOL",
-                "name": "type_parameter"
-              }
-            ]
+            "type": "SYMBOL",
+            "name": "type"
           }
         }
       ]
-    },
-    "constructor_name": {
-      "type": "PATTERN",
-      "value": "[A-Z][A-Za-z]*"
-    },
-    "type_identifier": {
-      "type": "PATTERN",
-      "value": "[A-Z][A-Za-z]*"
-    },
-    "type_parameter": {
-      "type": "PATTERN",
-      "value": "[a-z]+"
     },
     "value_definition": {
       "type": "SEQ",
@@ -165,11 +140,7 @@
       "type": "PATTERN",
       "value": "[a-z]+"
     },
-    "value_identifier": {
-      "type": "PATTERN",
-      "value": "[a-z]+"
-    },
-    "product_type": {
+    "alias_definition": {
       "type": "SEQ",
       "members": [
         {
@@ -191,6 +162,65 @@
           "type": "STRING",
           "value": "="
         },
+        {
+          "type": "SYMBOL",
+          "name": "type"
+        }
+      ]
+    },
+    "type": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "sum_type"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "type_parameter"
+        },
+        {
+          "type": "SEQ",
+          "members": [
+            {
+              "type": "STRING",
+              "value": "("
+            },
+            {
+              "type": "SYMBOL",
+              "name": "type"
+            },
+            {
+              "type": "STRING",
+              "value": ")"
+            }
+          ]
+        },
+        {
+          "type": "SYMBOL",
+          "name": "product_type"
+        }
+      ]
+    },
+    "sum_type": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "type_identifier"
+        },
+        {
+          "type": "REPEAT",
+          "content": {
+            "type": "SYMBOL",
+            "name": "type"
+          }
+        }
+      ]
+    },
+    "product_type": {
+      "type": "SEQ",
+      "members": [
         {
           "type": "STRING",
           "value": "{"
@@ -259,13 +289,9 @@
         },
         {
           "type": "SYMBOL",
-          "name": "type_identifier"
+          "name": "type"
         }
       ]
-    },
-    "field_identifier": {
-      "type": "PATTERN",
-      "value": "[a-z]+"
     },
     "expression": {
       "type": "SYMBOL",
@@ -274,6 +300,26 @@
     "string": {
       "type": "PATTERN",
       "value": "\\\".*\\\""
+    },
+    "constructor_name": {
+      "type": "PATTERN",
+      "value": "[A-Z][A-Za-z0-9]*"
+    },
+    "type_identifier": {
+      "type": "PATTERN",
+      "value": "[A-Z][A-Za-z0-9]*"
+    },
+    "type_parameter": {
+      "type": "PATTERN",
+      "value": "[a-z][A-Za-z0-9]*"
+    },
+    "value_identifier": {
+      "type": "PATTERN",
+      "value": "[a-z][A-Za-z0-9]*"
+    },
+    "field_identifier": {
+      "type": "PATTERN",
+      "value": "[a-z][A-Za-z0-9]*"
     }
   },
   "extras": [
@@ -287,7 +333,12 @@
     }
   ],
   "conflicts": [
-    []
+    [
+      "constructor"
+    ],
+    [
+      "sum_type"
+    ]
   ],
   "precedences": [],
   "externals": [],
